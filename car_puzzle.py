@@ -39,6 +39,7 @@ def result(deck):
         if will_accept(card, shown):
             return card - best
     
+    card = deck.pop()
     return card - best
     
 cards = [0, 1, 2, 3, 4]
@@ -50,7 +51,4 @@ for deck in decks:
     deck = list(deck)
     results.append(result(deck))
 
-print(sum(results)/len(results))
-            
-    
-        
+print(sum(results)/len(results))    

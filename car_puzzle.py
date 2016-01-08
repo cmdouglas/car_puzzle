@@ -1,4 +1,9 @@
 import itertools
+DEBUG = True
+
+def debug(msg, value):
+    if DEBUG:
+        print(msg + ': ' + str(value))
 
 def possible_decks(shown):
     max_possible = min(shown) + 5
@@ -22,7 +27,9 @@ def expected_value(decks):
     
 def will_accept(card, shown):
     decks = possible_decks(shown)
+    debug('possible decks', decks)
     expected = expected_value(decks)
+    debug('expected', expected)
     
     if expected <= card:
         return False
@@ -30,25 +37,37 @@ def will_accept(card, shown):
         return True
         
 def result(deck):
+    debug('finding best result for deck', deck)
     best = min(deck)
     card = None
     shown = []
     while(len(deck) > 1):
-        card = deck.pop()
+        card = deck.pop(0)
+        debug('card', card)
         shown.append(card)
         if will_accept(card, shown):
+            debug('accepting card', card)
             return card - best
+        else:
+            debug('rejecting card', card)
     
-    card = deck.pop()
+    card = deck.pop(0)
+    debug('forced to accept card', card)
     return card - best
     
-cards = [0, 1, 2, 3, 4]
-decks = itertools.permutations(cards)
+def solve():
+    cards = [0, 1, 2, 3, 4]
+    decks = itertools.permutations(cards)
 
-results = []
+    results = {}
 
-for deck in decks:
-    deck = list(deck)
-    results.append(result(deck))
+    for deck in decks:
+        k = tuple(deck)
+        deck = list(deck)
+        results[k] = result(deck)
+        debug('-- ', '--')
 
-print(sum(results)/len(results))    
+    print(sum(results.values())/len(results))
+
+if __name__ == '__main__':
+    solve()
